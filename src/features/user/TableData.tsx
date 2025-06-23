@@ -57,7 +57,9 @@ export const TableData = () => {
               <td className="px-4 py-3">
                 {rowUser.role === "admin" ? "Administrador" : "Usuário comum"}
               </td>
-              <td>{rowUser.isEnable ? "Ativo" : "Inativo"}</td>
+              <td className="px-4 py-3">
+                {rowUser.isEnable ? "Ativo" : "Inativo"}
+              </td>
               <td className="px-4 py-3">
                 {rowUser.id !== user?.id && (
                   <button
