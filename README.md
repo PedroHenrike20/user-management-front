@@ -25,8 +25,8 @@ Frontend da aplicação da People's Consultoria, desenvolvido com React.
 ## 📦 Instalação local
 
 ```bash
-git clone https://github.com/seu-usuario/peoples-consultoria-frontend.git
-cd frontend
+git clone https://github.com/PedroHenrike20/user-manegement-front
+cd projeto-clonado
 npm install
 npm run dev
 ```
