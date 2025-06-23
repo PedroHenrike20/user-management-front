@@ -58,8 +58,9 @@ const UpdateForm = ({ user, close }: UpdateFormProps) => {
       />
       <input
         {...register("email")}
+        disabled
         placeholder="Email"
-        className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
       />
       <input
         {...register("password")}
