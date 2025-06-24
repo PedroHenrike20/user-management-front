@@ -92,6 +92,8 @@ volumes:
   db_data:
 ```
 
+obs.: Não esqueça de fornecer as informações do banco de dados.
+
 ### 2. Suba os containers
 
 Execute o comando abaixo na raiz do projeto (onde está o docker-compose.yml):
