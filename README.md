@@ -28,9 +28,11 @@ Frontend da aplicação da People's Consultoria, desenvolvido com React.
 
 Clone os repositórios do **frontend** e do **backend** dentro de uma mesma pasta. A estrutura deve ficar assim:
 
+```text
 /nome-da-sua-pasta
 ├── backend
 └── frontend
+```
 
 ```bash
 git clone https://github.com/PedroHenrike20/user-manegement-front
