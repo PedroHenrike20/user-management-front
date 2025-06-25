@@ -32,7 +32,9 @@ export const loginUser = async (
       const messages = error.errors[0];
       return Promise.reject(new Error(`Erro de login: ${messages.message}`));
     } else {
-      return Promise.reject(new Error("Erro desconhecido"));
+      return Promise.reject(
+        new Error(error instanceof Error ? error.message : "Erro desconhecido")
+      );
     }
   }
 };
@@ -42,6 +44,12 @@ const loadDataUser = async () => {
     const response = await api.get<UserDto>(`user/${PREFIX_ROUTE_API}profile`);
     return response.data;
   } catch (error) {
-    return Promise.reject(new Error("Erro ao carregar dados do usuário"));
+    return Promise.reject(
+      new Error(
+        error instanceof Error
+          ? error.message
+          : "Erro ao carregar dados do usuário"
+      )
+    );
   }
 };

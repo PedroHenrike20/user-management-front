@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/userService";
@@ -15,11 +16,12 @@ const RegisterForm = () => {
   const onSubmit = async (data: RegisterFormInputs) => {
     try {
       await registerUser(data);
-      alert("Cadastro realizado com sucesso!");
+      toast.success("Cadastro realizado com sucesso!");
       navigate("/login");
     } catch (err) {
-      alert(
-        err instanceof Error ? `${err.message}` : "Erro ao cadastrar usuário"
+      toast.error(
+        "Erro ao cadastrar usuário - " +
+          (err instanceof Error ? err.message : "Erro desconhecido")
       );
     }
   };

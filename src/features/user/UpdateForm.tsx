@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import { setUser } from "../../store/authSlice";
+import { toast } from "react-toastify";
 
 type UpdateFormDto = {
   id?: string;
@@ -39,11 +40,11 @@ const UpdateForm = ({ user, close }: UpdateFormProps) => {
       if (user.id === userLogado?.id) {
         dispatch(setUser(response!));
       }
-      alert("Usuario atualizado com sucesso!");
+      toast.success("Usuário atualizado com sucesso!");
       close();
-    } catch (err) {
-      alert(
-        err instanceof Error ? `${err.message}` : "Erro ao atualizar usuário"
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Erro ao atualizar usuário"
       );
     }
   };

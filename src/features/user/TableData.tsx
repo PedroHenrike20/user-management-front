@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import { getAllUsers } from "../../services/userService";
 import { Delete } from "./Delete";
+import { toast } from "react-toastify";
 
 export const TableData = () => {
   const [userSelected, setUserSelected] = useState<UserDto | null>(null);
@@ -24,7 +25,9 @@ export const TableData = () => {
       const filteredUsers = response.filter((u: UserDto) => u.id !== user?.id);
       setUsers(filteredUsers);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Erro ao carregar usuários"
+      );
     }
   };
 

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login, setUser } from "../../store/authSlice";
 import { loginUser } from "../../services/authService";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
   const { register, handleSubmit } = useForm();
@@ -15,8 +16,10 @@ const LoginForm = () => {
       dispatch(login(token.access_token));
       dispatch(setUser(user));
       navigate("/home");
-    } catch (err) {
-      alert(err instanceof Error ? `${err.message}` : "Erro ao fazer o login");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Erro ao fazer o login"
+      );
     }
   };
 

@@ -39,7 +39,9 @@ export const registerUser = async (
         new Error(`Erro de validação: ${mensagens.join(", ")}`)
       );
     } else {
-      return Promise.reject(new Error("Erro desconhecido"));
+      return Promise.reject(
+        new Error(error instanceof Error ? error.message : "Erro desconhecido")
+      );
     }
   }
 };
@@ -48,7 +50,11 @@ export const deleteUser = async (id: string): Promise<void> => {
   try {
     await api.delete(`${PREFIX_ROUTE_API}user/${id}`);
   } catch (error) {
-    return Promise.reject(new Error("Erro ao deletar usuário"));
+    return Promise.reject(
+      new Error(
+        error instanceof Error ? error.message : "Erro ao excluir usuário"
+      )
+    );
   }
 };
 
@@ -70,7 +76,11 @@ export const updateUser = async (
         new Error(`Erro de validação: ${mensagens.join(", ")}`)
       );
     } else {
-      return Promise.reject(new Error("Erro desconhecido"));
+      return Promise.reject(
+        new Error(
+          error instanceof Error ? error.message : "Erro ao atualizar usuário"
+        )
+      );
     }
   }
 };
@@ -80,6 +90,10 @@ export const getAllUsers = async (): Promise<UserDto[]> => {
     const response = await api.get<UserDto[]>(`${PREFIX_ROUTE_API}users`);
     return response.data;
   } catch (error) {
-    return Promise.reject(new Error("Erro ao buscar usuários"));
+    return Promise.reject(
+      new Error(
+        error instanceof Error ? error.message : "Erro ao buscar usuários"
+      )
+    );
   }
 };

@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { deleteUser } from "../../services/userService";
 import type { UserDto } from "../../types/User";
 
@@ -10,10 +11,12 @@ export const Delete = ({ user, close }: DeleteProps) => {
   const handleDeleteUser = async () => {
     try {
       await deleteUser(user.id);
-      alert("Usuário removido com sucesso!");
+      toast.success("Usuário removido com sucesso!");
       close();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Erro ao deletar usuário");
+      toast.error(
+        error instanceof Error ? error.message : "Erro ao excluir usuário"
+      );
     }
   };
 
