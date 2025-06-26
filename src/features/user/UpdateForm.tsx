@@ -1,11 +1,12 @@
 import { useForm } from "react-hook-form";
 import { updateUser } from "../../services/userService";
 import type { UserDto } from "../../types/User";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import { setUser } from "../../store/authSlice";
 import { toast } from "react-toastify";
+import LoadingButton from "../../components/LoadingButton";
 
 type UpdateFormDto = {
   id?: string;
@@ -21,7 +22,7 @@ type UpdateFormProps = {
 
 const UpdateForm = ({ user, close }: UpdateFormProps) => {
   const { register, handleSubmit, setValue } = useForm<UpdateFormDto>();
-
+  const [loading, setLoading] = useState(false);
   const userLogado = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
 
@@ -35,6 +36,7 @@ const UpdateForm = ({ user, close }: UpdateFormProps) => {
   }, [user, setValue]);
 
   const onSubmit = async (data: UpdateFormDto) => {
+    setLoading(true);
     try {
       const response = await updateUser(data.id!, data);
       if (user.id === userLogado?.id) {
@@ -46,6 +48,8 @@ const UpdateForm = ({ user, close }: UpdateFormProps) => {
       toast.error(
         error instanceof Error ? error.message : "Erro ao atualizar usuário"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,12 +73,14 @@ const UpdateForm = ({ user, close }: UpdateFormProps) => {
         placeholder="Senha"
         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <button
+
+      <LoadingButton
+        loading={loading}
         type="submit"
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md"
+        className="bg-blue-600 hover:bg-blue-700 text-white"
       >
         Atualizar
-      </button>
+      </LoadingButton>
     </form>
   );
 };

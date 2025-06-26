@@ -43,7 +43,9 @@ const Profile = () => {
             </div>
 
             <div>
-              <p className="text-sm font-medium text-gray-500">Role</p>
+              <p className="text-sm font-medium text-gray-500">
+                Tipo de usuário
+              </p>
               <p className="text-base font-medium text-gray-900">
                 {user?.role === "admin" ? "Administrador" : "Usuário comum"}
               </p>

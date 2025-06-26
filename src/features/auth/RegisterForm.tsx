@@ -2,6 +2,8 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/userService";
+import LoadingButton from "../../components/LoadingButton";
+import { useState } from "react";
 
 type RegisterFormInputs = {
   name: string;
@@ -11,18 +13,24 @@ type RegisterFormInputs = {
 
 const RegisterForm = () => {
   const { register, handleSubmit } = useForm<RegisterFormInputs>();
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const onSubmit = async (data: RegisterFormInputs) => {
+    setLoading(true);
     try {
       await registerUser(data);
       toast.success("Cadastro realizado com sucesso!");
       navigate("/login");
     } catch (err) {
       toast.error(
-        "Erro ao cadastrar usuário - " +
-          (err instanceof Error ? err.message : "Erro desconhecido")
+        err instanceof Error
+          ? err.message
+          : "Erro desconhecido. Não foi possível realizar o cadastro!"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,12 +52,13 @@ const RegisterForm = () => {
         placeholder="Senha"
         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <button
+      <LoadingButton
+        loading={loading}
         type="submit"
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md"
+        className="bg-blue-600 hover:bg-blue-700 text-white"
       >
-        Criar Conta
-      </button>
+        Criar conta
+      </LoadingButton>
     </form>
   );
 };

@@ -1,6 +1,7 @@
 import type { CreateUserDto, UserDto } from "../types/User";
 import { z } from "zod";
 import api from "./api";
+import axios from "axios";
 
 const PREFIX_ROUTE_API = "user/auth/";
 
@@ -27,22 +28,54 @@ export const registerUser = async (
 ): Promise<UserDto | undefined> => {
   try {
     const parsedData: FormData = formSchema.parse(user);
+
     const response = await api.post<UserDto>(
       `${PREFIX_ROUTE_API}register`,
       parsedData
     );
+
     return response.data;
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      const mensagens = error.errors.map((e) => `${e.message}`);
-      return Promise.reject(
-        new Error(`Erro de validação: ${mensagens.join(", ")}`)
+      const errors = error.errors;
+
+      const hasPasswordMinError = errors.some(
+        (e) =>
+          e.code.toLowerCase().includes("too_small") &&
+          e.path.includes("password")
       );
-    } else {
+
+      const hasRequiredFieldError = errors.some(
+        (e) =>
+          e.code === "invalid_type" ||
+          e.message.toLowerCase().includes("obrigatório")
+      );
+
+      if (hasRequiredFieldError) {
+        return Promise.reject(new Error("Preencha os campos vazios"));
+      }
+
+      if (hasPasswordMinError) {
+        return Promise.reject(
+          new Error("Senha deve ter pelo menos 6 caracteres")
+        );
+      }
+
+      const messages = errors.map((e) => e.message);
       return Promise.reject(
-        new Error(error instanceof Error ? error.message : "Erro desconhecido")
+        new Error(`Erro de validação: ${messages.join(", ")}`)
       );
     }
+
+    if (axios.isAxiosError(error)) {
+      const apiMessage = error.response?.data?.message;
+
+      if (typeof apiMessage === "string") {
+        return Promise.reject(new Error(apiMessage));
+      }
+    }
+
+    return Promise.reject(new Error("Erro desconhecido"));
   }
 };
 
@@ -50,11 +83,14 @@ export const deleteUser = async (id: string): Promise<void> => {
   try {
     await api.delete(`${PREFIX_ROUTE_API}user/${id}`);
   } catch (error) {
-    return Promise.reject(
-      new Error(
-        error instanceof Error ? error.message : "Erro ao excluir usuário"
-      )
-    );
+    if (axios.isAxiosError(error)) {
+      const apiMessage = error.response?.data?.message;
+
+      if (typeof apiMessage === "string") {
+        return Promise.reject(new Error(apiMessage));
+      }
+    }
+    return Promise.reject(new Error("Erro desconhecido"));
   }
 };
 
@@ -76,11 +112,14 @@ export const updateUser = async (
         new Error(`Erro de validação: ${mensagens.join(", ")}`)
       );
     } else {
-      return Promise.reject(
-        new Error(
-          error instanceof Error ? error.message : "Erro ao atualizar usuário"
-        )
-      );
+      if (axios.isAxiosError(error)) {
+        const apiMessage = error.response?.data?.message;
+
+        if (typeof apiMessage === "string") {
+          return Promise.reject(new Error(apiMessage));
+        }
+      }
+      return Promise.reject(new Error("Erro desconhecido"));
     }
   }
 };
@@ -90,10 +129,13 @@ export const getAllUsers = async (): Promise<UserDto[]> => {
     const response = await api.get<UserDto[]>(`${PREFIX_ROUTE_API}users`);
     return response.data;
   } catch (error) {
-    return Promise.reject(
-      new Error(
-        error instanceof Error ? error.message : "Erro ao buscar usuários"
-      )
-    );
+    if (axios.isAxiosError(error)) {
+      const apiMessage = error.response?.data?.message;
+
+      if (typeof apiMessage === "string") {
+        return Promise.reject(new Error(apiMessage));
+      }
+    }
+    return Promise.reject(new Error("Erro desconhecido"));
   }
 };

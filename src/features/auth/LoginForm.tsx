@@ -4,13 +4,17 @@ import { useDispatch } from "react-redux";
 import { login, setUser } from "../../store/authSlice";
 import { loginUser } from "../../services/authService";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import LoadingButton from "../../components/LoadingButton";
 
 const LoginForm = () => {
   const { register, handleSubmit } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: FieldValues) => {
+    setLoading(true);
     try {
       const { token, user } = await loginUser(data.email, data.password);
       dispatch(login(token.access_token));
@@ -20,6 +24,8 @@ const LoginForm = () => {
       toast.error(
         error instanceof Error ? error.message : "Erro ao fazer o login"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,12 +42,13 @@ const LoginForm = () => {
         type="password"
         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <button
+      <LoadingButton
+        loading={loading}
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        className="bg-blue-600 hover:bg-blue-700 text-white"
       >
         Entrar
-      </button>
+      </LoadingButton>
     </form>
   );
 };

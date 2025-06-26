@@ -2,6 +2,7 @@ import { z } from "zod";
 import api from "./api";
 import type { ResponsePayloadLogin } from "../types/Auth";
 import type { UserDto } from "../types/User";
+import axios from "axios";
 
 const PREFIX_ROUTE_API = "auth/";
 
@@ -32,9 +33,14 @@ export const loginUser = async (
       const messages = error.errors[0];
       return Promise.reject(new Error(`Erro de login: ${messages.message}`));
     } else {
-      return Promise.reject(
-        new Error(error instanceof Error ? error.message : "Erro desconhecido")
-      );
+      if (axios.isAxiosError(error)) {
+        const apiMessage = error.response?.data?.message;
+
+        if (typeof apiMessage === "string") {
+          return Promise.reject(new Error(apiMessage));
+        }
+      }
+      return Promise.reject(new Error("Erro desconhecido"));
     }
   }
 };
@@ -44,12 +50,13 @@ const loadDataUser = async () => {
     const response = await api.get<UserDto>(`user/${PREFIX_ROUTE_API}profile`);
     return response.data;
   } catch (error) {
-    return Promise.reject(
-      new Error(
-        error instanceof Error
-          ? error.message
-          : "Erro ao carregar dados do usuário"
-      )
-    );
+    if (axios.isAxiosError(error)) {
+      const apiMessage = error.response?.data?.message;
+
+      if (typeof apiMessage === "string") {
+        return Promise.reject(new Error(apiMessage));
+      }
+    }
+    return Promise.reject(new Error("Erro desconhecido"));
   }
 };
