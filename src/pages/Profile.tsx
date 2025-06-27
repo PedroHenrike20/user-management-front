@@ -29,7 +29,7 @@ const Profile = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-gray-200 pt-6">
             <div>
-              <p className="text-sm font-medium text-gray-500">Name</p>
+              <p className="text-sm font-medium text-gray-500">Nome</p>
               <p className="text-base font-medium text-gray-900">
                 {user?.name}
               </p>

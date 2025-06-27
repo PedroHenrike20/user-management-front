@@ -21,7 +21,9 @@ type UpdateFormProps = {
 };
 
 const UpdateForm = ({ user, close }: UpdateFormProps) => {
-  const { register, handleSubmit, setValue } = useForm<UpdateFormDto>();
+  const { register, handleSubmit, setValue, formState } =
+    useForm<UpdateFormDto>();
+  const { isValid } = formState;
   const [loading, setLoading] = useState(false);
   const userLogado = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
@@ -57,25 +59,26 @@ const UpdateForm = ({ user, close }: UpdateFormProps) => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <input type="hidden" {...register("id")} />
       <input
-        {...register("name")}
+        {...register("name", { required: true })}
         placeholder="Nome"
         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
-        {...register("email")}
+        {...register("email", { required: true })}
         disabled
         placeholder="Email"
         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
       />
       <input
-        {...register("password")}
+        {...register("password", { required: false })}
         type="password"
-        placeholder="Senha"
+        placeholder="Senha (obs. Caso não queira alterar, deixe em branco)"
         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
       <LoadingButton
         loading={loading}
+        disabled={!isValid}
         type="submit"
         className="bg-blue-600 hover:bg-blue-700 text-white"
       >

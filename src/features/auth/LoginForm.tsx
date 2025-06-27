@@ -8,7 +8,9 @@ import { useState } from "react";
 import LoadingButton from "../../components/LoadingButton";
 
 const LoginForm = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState } = useForm({ mode: "onChange" });
+  const { isValid } = formState;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -32,17 +34,18 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <input
-        {...register("email")}
+        {...register("email", { required: true })}
         placeholder="Email"
         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
-        {...register("password")}
+        {...register("password", { required: true })}
         placeholder="Senha"
         type="password"
         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <LoadingButton
+        disabled={!isValid}
         loading={loading}
         type="submit"
         className="bg-blue-600 hover:bg-blue-700 text-white"

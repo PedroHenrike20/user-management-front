@@ -23,7 +23,7 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
       onClick={onClick}
       type={type}
       disabled={loading || disabled}
-      className={`w-full py-2 rounded text-white font-semibold flex items-center justify-center transition
+      className={`w-full py-2 rounded text-white font-semibold flex items-center justify-center transition disabled:bg-gray-400 disabled:cursor-not-allowed
         ${
           loading
             ? "bg-blue-400 cursor-not-allowed"
