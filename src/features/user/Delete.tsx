@@ -19,7 +19,7 @@ export const Delete = ({ user, close }: DeleteProps) => {
       close();
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Erro ao excluir usuário"
+        error instanceof Error ? error.message : "Erro ao excluir usuário",
       );
     } finally {
       setLoading(false);
@@ -33,7 +33,7 @@ export const Delete = ({ user, close }: DeleteProps) => {
       </p>
 
       <LoadingButton
-        className="bg-red-600 hover:bg-red-700 text-white"
+        className="bg-red-600 hover:bg-red-700 text-white cursor-pointer"
         loading={loading}
         onClick={handleDeleteUser}
       >

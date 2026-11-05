@@ -14,12 +14,14 @@ export const TableData = () => {
   const [typeModalOpen, setTypeModalOpen] = useState<ModalType>(null);
   const user = useSelector((state: RootState) => state.auth.user);
   const [users, setUsers] = useState<UserDto[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const response = await getAllUsers();
       const filteredUsers = response.filter((u: UserDto) => u.id !== user?.id);
@@ -28,6 +30,8 @@ export const TableData = () => {
       toast.error(
         error instanceof Error ? error.message : "Erro ao carregar usuários"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,28 +57,50 @@ export const TableData = () => {
           </tr>
         </thead>
         <tbody className="text-sm text-gray-700">
-          {users.map((rowUser, index) => (
-            <tr key={index} className="border-t">
-              <td className="px-4 py-3">{rowUser.name}</td>
-              <td className="px-4 py-3">{rowUser.email}</td>
-              <td className="px-4 py-3">
-                {rowUser.role === "admin" ? "Administrador" : "Usuário comum"}
-              </td>
-              <td className="px-4 py-3">
-                {rowUser.isEnable ? "Ativo" : "Inativo"}
-              </td>
-              <td className="px-4 py-3">
-                {rowUser.id !== user?.id && (
-                  <button
-                    onClick={() => openModal("delete", rowUser)}
-                    className="cursor-pointer"
-                  >
-                    <Trash size={20} color="red" />
-                  </button>
-                )}
+          {loading ? (
+            <tr>
+              <td colSpan={5} className="border-t px-4 py-6 text-center">
+                <span role="status" className="inline-flex items-center gap-2">
+                  <span
+                    aria-hidden="true"
+                    className="size-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-700"
+                  />
+                  Carregando registros...
+                </span>
               </td>
             </tr>
-          ))}
+          ) : users.length === 0 ? (
+            <tr>
+              <td colSpan={5} className="border-t px-4 py-6 text-center">
+                Não há registros.
+              </td>
+            </tr>
+          ) : (
+            users.map((rowUser, index) => (
+              <tr key={index} className="border-t">
+                <td className="px-4 py-3">{rowUser.name}</td>
+                <td className="px-4 py-3">{rowUser.email}</td>
+                <td className="px-4 py-3">
+                  {rowUser.role === "admin"
+                    ? "Administrador"
+                    : "Usuário comum"}
+                </td>
+                <td className="px-4 py-3">
+                  {rowUser.isEnable ? "Ativo" : "Inativo"}
+                </td>
+                <td className="px-4 py-3">
+                  {rowUser.id !== user?.id && (
+                    <button
+                      onClick={() => openModal("delete", rowUser)}
+                      className="cursor-pointer"
+                    >
+                      <Trash size={20} color="red" />
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
       <Modal
