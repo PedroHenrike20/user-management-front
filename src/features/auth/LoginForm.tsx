@@ -24,7 +24,7 @@ const LoginForm = () => {
       navigate("/home");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Erro ao fazer o login"
+        error instanceof Error ? error.message : "Erro ao fazer o login",
       );
     } finally {
       setLoading(false);
@@ -48,7 +48,7 @@ const LoginForm = () => {
         disabled={!isValid}
         loading={loading}
         type="submit"
-        className="bg-blue-600 hover:bg-blue-700 text-white"
+        className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
       >
         Entrar
       </LoadingButton>

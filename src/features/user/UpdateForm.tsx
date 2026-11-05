@@ -48,7 +48,7 @@ const UpdateForm = ({ user, close }: UpdateFormProps) => {
       close();
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Erro ao atualizar usuário"
+        error instanceof Error ? error.message : "Erro ao atualizar usuário",
       );
     } finally {
       setLoading(false);
@@ -80,7 +80,7 @@ const UpdateForm = ({ user, close }: UpdateFormProps) => {
         loading={loading}
         disabled={!isValid}
         type="submit"
-        className="bg-blue-600 hover:bg-blue-700 text-white"
+        className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
       >
         Atualizar
       </LoadingButton>

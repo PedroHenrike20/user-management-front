@@ -19,7 +19,7 @@ const Profile = () => {
           <div className="w-full flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
             <h3 className="text-xl font-semibold">Meus dados</h3>
             <button
-              className="inline-flex items-center gap-2 bg-transparent text-gray-600 hover:text-gray-900 border border-gray-300 hover:border-gray-400 px-3 py-1.5 rounded-md text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 self-start sm:self-auto"
+              className="inline-flex items-center gap-2 cursor-pointer bg-transparent text-gray-600 hover:text-gray-900 border border-gray-300 hover:border-gray-400 px-3 py-1.5 rounded-md text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 self-start sm:self-auto"
               onClick={openModal}
             >
               <Edit size={16} />

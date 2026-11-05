@@ -28,7 +28,7 @@ const RegisterForm = () => {
       toast.error(
         err instanceof Error
           ? err.message
-          : "Erro desconhecido. Não foi possível realizar o cadastro!"
+          : "Erro desconhecido. Não foi possível realizar o cadastro!",
       );
     } finally {
       setLoading(false);
@@ -57,7 +57,7 @@ const RegisterForm = () => {
         loading={loading}
         disabled={!isValid}
         type="submit"
-        className="bg-blue-600 hover:bg-blue-700 text-white"
+        className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
       >
         Criar conta
       </LoadingButton>

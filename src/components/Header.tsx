@@ -6,7 +6,7 @@ import { logout } from "../store/authSlice";
 const Header = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
+    (state: RootState) => state.auth.isAuthenticated,
   );
 
   const isActive = (path: string) => location.pathname === path;
@@ -71,7 +71,7 @@ const Header = () => {
 
           <button
             onClick={handleLogout}
-            className="hover:underline text-red-500 sm:ml-10"
+            className="hover:underline text-red-500 sm:ml-10 cursor-pointer"
           >
             Sair
           </button>
